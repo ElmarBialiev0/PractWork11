@@ -1,59 +1,82 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title')</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>@yield('title', 'Мой сайт на Laravel')</title>
 
-    <style>
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
-        }
-
-        main {
-            flex: 1;
-        }
-
-        footer {
-            background-color: #212529;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-    </style>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="{{ route('home') }}">Мой сайт</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
 
-                <div class="navbar-nav">
-                    <a class="nav-link" href="{{ route('home') }}">Главная</a>
-                    <a class="nav-link" href="{{ route('about') }}">О нас</a>
-                    <a class="nav-link" href="{{ route('contacts') }}">Контакты</a>
-                </div>
+            <a class="navbar-brand" href="{{ route('home') }}">
+                Мой сайт
+            </a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu"
+                aria-expanded="false"
+                aria-label="Открыть меню"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('home') }}">
+                            Главная
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('about') }}">
+                            О нас
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('contacts') }}">
+                            Контакты
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('galery', 0) }}">
+                            Галерея
+                        </a>
+                    </li>
+
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <!-- Основная часть -->
-    <main class="container py-5">
+    <main class="container my-5">
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <p class="mb-0">Биалиев Эльмар | 257-321</p>
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p class="mb-0">
+                Биалиев Эльмар | 257-321
+            </p>
+        </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

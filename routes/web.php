@@ -2,11 +2,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
 
-// Главная страница
-Route::get('/', function () {
-    return view('pages.home');
-})->name('home');
+// Главная страница через контроллер
+Route::get('/', [MainController::class, 'index'])->name('home');
 
 // Страница "О нас"
 Route::get('/about', function () {
@@ -40,3 +39,7 @@ Route::get('/contacts', function () {
     ]);
 
 })->name('contacts');
+
+// Страница галереи
+Route::get('/galery/{id}', [MainController::class, 'galery'])
+    ->name('galery');

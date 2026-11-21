@@ -4,16 +4,43 @@
 @section('title', 'Главная страница')
 
 @section('content')
-    <div class="text-center">
-        <h1 class="display-4 mb-4">Добро пожаловать!</h1>
+    <h1 class="text-center mb-4">Новости и статьи</h1>
 
-        <p class="lead">
-            Рады приветствовать вас на нашем сайте!
-        </p>
+    <div class="row">
+        @foreach($articles as $id => $article)
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm h-100">
 
-        <p>
-            Здесь вы сможете узнать больше о нас
-            и найти контактную информацию.
-        </p>
+                    <a href="{{ route('galery', $id) }}">
+                        <img
+                            src="{{ asset($article['preview_image']) }}"
+                            class="card-img-top"
+                            alt="{{ $article['name'] }}"
+                            style="height: 220px; object-fit: cover;"
+                        >
+                    </a>
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ $article['name'] }}
+                        </h5>
+
+                        <p class="text-muted">
+                            {{ $article['date'] }}
+                        </p>
+
+                        <p class="card-text">
+                            {{ $article['shortDesc'] ?? $article['desc'] }}
+                        </p>
+
+                        <a href="{{ route('galery', $id) }}"
+                           class="btn btn-primary">
+                            Подробнее
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        @endforeach
     </div>
 @endsection
