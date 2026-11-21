@@ -1,11 +1,14 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
-// Главная страница через контроллер
-Route::get('/', [MainController::class, 'index'])->name('home');
+
+// Главная страница
+Route::get('/', [MainController::class, 'index'])
+    ->name('home');
 
 // Страница "О нас"
 Route::get('/about', function () {
@@ -44,34 +47,47 @@ Route::get('/contacts', function () {
 Route::get('/galery/{id}', [MainController::class, 'galery'])
     ->name('galery');
 
-// Страница регистрации
+// Регистрация
 Route::get('/signin', [AuthController::class, 'create'])
     ->name('signin.create');
 
-// Обработка регистрации
 Route::post('/signin', [AuthController::class, 'registration'])
     ->name('signin.registration');
 
-Route::get('/articles', [ArticleController::class, 'index'])
-    ->name('articles.index');
-// Новости и CRUD
-Route::get('/articles', [ArticleController::class, 'index'])
-    ->name('articles.index');
+// Авторизация
+Route::get('/login', [AuthController::class, 'loginForm'])
+    ->name('login');
 
-Route::get('/articles/create', [ArticleController::class, 'create'])
-    ->name('articles.create');
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login.process');
 
-Route::post('/articles', [ArticleController::class, 'store'])
-    ->name('articles.store');
+// Выход из системы
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
 
-Route::get('/articles/{id}', [ArticleController::class, 'show'])
-    ->name('articles.show');
+// Защищённые маршруты
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])
-    ->name('articles.edit');
+    // Новости и CRUD
+    Route::get('/articles', [ArticleController::class, 'index'])
+        ->name('articles.index');
 
-Route::put('/articles/{id}', [ArticleController::class, 'update'])
-    ->name('articles.update');
+    Route::get('/articles/create', [ArticleController::class, 'create'])
+        ->name('articles.create');
 
-Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])
-    ->name('articles.destroy');
+    Route::post('/articles', [ArticleController::class, 'store'])
+        ->name('articles.store');
+
+    Route::get('/articles/{id}', [ArticleController::class, 'show'])
+        ->name('articles.show');
+
+    Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])
+        ->name('articles.edit');
+
+    Route::put('/articles/{id}', [ArticleController::class, 'update'])
+        ->name('articles.update');
+
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])
+        ->name('articles.destroy');
+
+});
