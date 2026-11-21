@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Mail\ArticleCreated;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\VeryLongJob;
 class ArticleController
 {
     // Список новостей
@@ -60,16 +61,7 @@ class ArticleController
         // Сохраняем статью в базе данных
         $article = Article::create($validated);
 
-        // Находим модератора
-        $moderator = User::whereHas('role', function ($query) {
-            $query->where('name', 'moderator');
-        })->first();
-
-        // Отправляем письмо модератору
-        if ($moderator) {
-            Mail::to($moderator->email)
-                ->send(new ArticleCreated($article));
-        }
+        VeryLongJob::dispatch($article);
 
         return redirect()
             ->route('articles.index')
