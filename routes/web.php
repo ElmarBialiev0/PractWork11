@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 
 // Главная страница
 Route::get('/', [MainController::class, 'index'])
@@ -67,6 +68,13 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 // Защищённые маршруты
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Комментарии
+    Route::post('/articles/{articleId}/comments', [CommentController::class, 'store'])
+        ->name('comments.store');
+
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])
+        ->name('comments.destroy');
 
     // Новости и CRUD
     Route::get('/articles', [ArticleController::class, 'index'])

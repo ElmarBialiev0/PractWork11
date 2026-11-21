@@ -21,12 +21,14 @@
         </div>
     @endif
 
-    {{-- Кнопка добавления новости --}}
-    <div class="mb-4">
-        <a href="{{ route('articles.create') }}" class="btn btn-success">
-            + Добавить новость
-        </a>
-    </div>
+    {{-- Кнопка добавления новости: только модератор --}}
+    @can('create', \App\Models\Article::class)
+        <div class="mb-4">
+            <a href="{{ route('articles.create') }}" class="btn btn-success">
+                + Добавить новость
+            </a>
+        </div>
+    @endcan
 
     {{-- Список новостей --}}
     <div class="row">
@@ -58,26 +60,33 @@
                         {{-- Кнопки управления --}}
                         <div class="d-flex flex-wrap gap-2 mt-3">
 
+                            {{-- Просмотр доступен всем --}}
                             <a href="{{ route('articles.show', $article->id) }}"
                                class="btn btn-primary btn-sm">
                                 Подробнее
                             </a>
 
-                            <a href="{{ route('articles.edit', $article->id) }}"
-                               class="btn btn-warning btn-sm">
-                                Редактировать
-                            </a>
+                            {{-- Редактирование: только модератор --}}
+                            @can('update', $article)
+                                <a href="{{ route('articles.edit', $article->id) }}"
+                                   class="btn btn-warning btn-sm">
+                                    Редактировать
+                                </a>
+                            @endcan
 
-                            <form action="{{ route('articles.destroy', $article->id) }}"
-                                  method="POST"
-                                  onsubmit="return confirm('Вы действительно хотите удалить эту новость?')">
-                                @csrf
-                                @method('DELETE')
+                            {{-- Удаление: только модератор --}}
+                            @can('delete', $article)
+                                <form action="{{ route('articles.destroy', $article->id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Вы действительно хотите удалить эту новость?')">
+                                    @csrf
+                                    @method('DELETE')
 
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    Удалить
-                                </button>
-                            </form>
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Удалить
+                                    </button>
+                                </form>
+                            @endcan
 
                         </div>
                     </div>
@@ -86,7 +95,7 @@
         @empty
             <div class="col-12">
                 <div class="alert alert-info text-center">
-                    Новостей пока нет. Добавьте первую новость!
+                    Новостей пока нет.
                 </div>
             </div>
         @endforelse

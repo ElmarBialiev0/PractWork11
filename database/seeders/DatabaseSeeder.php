@@ -11,5 +11,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ArticleSeeder::class,
         ]);
+
+        $this->call([
+            RoleSeeder::class,
+        ]);
     }
 }

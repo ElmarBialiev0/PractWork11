@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleController
 {
     // Список новостей
     public function index()
     {
+        Gate::authorize('viewAny', Article::class);
+
         $articles = Article::paginate(6);
 
         return view('articles.index', [
@@ -18,24 +21,32 @@ class ArticleController
     }
 
     // Просмотр одной новости
+
     public function show($id)
     {
-        $article = Article::findOrFail($id);
+        $article = Article::with('comments.user')->findOrFail($id);
+
+        Gate::authorize('view', $article);
 
         return view('articles.show', [
             'article' => $article
         ]);
     }
 
+
     // Форма создания новости
     public function create()
     {
+        Gate::authorize('create', Article::class);
+
         return view('articles.create');
     }
 
     // Сохранение новой новости
     public function store(Request $request)
     {
+        Gate::authorize('create', Article::class);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'image' => 'nullable|string|max:255',
@@ -55,6 +66,8 @@ class ArticleController
     {
         $article = Article::findOrFail($id);
 
+        Gate::authorize('update', $article);
+
         return view('articles.edit', [
             'article' => $article
         ]);
@@ -64,6 +77,8 @@ class ArticleController
     public function update(Request $request, $id)
     {
         $article = Article::findOrFail($id);
+
+        Gate::authorize('update', $article);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -83,6 +98,9 @@ class ArticleController
     public function destroy($id)
     {
         $article = Article::findOrFail($id);
+
+        Gate::authorize('delete', $article);
+
         $article->delete();
 
         return redirect()
