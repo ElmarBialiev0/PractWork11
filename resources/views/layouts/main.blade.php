@@ -51,7 +51,8 @@
                 Мой сайт
             </a>
 
-            <button class="navbar-toggler" type="button"
+            <button class="navbar-toggler"
+                    type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarMenu"
                     aria-controls="navbarMenu"
@@ -94,6 +95,14 @@
                                 Новости
                             </a>
                         </li>
+
+                        @can('moderate-comments')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('comments.moderation') }}">
+                                    Модерация комментариев
+                                </a>
+                            </li>
+                        @endcan
 
                         <li class="nav-item">
                             <span class="nav-link text-info">

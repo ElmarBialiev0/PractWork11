@@ -6,6 +6,11 @@
 @section('content')
 <div class="container">
 
+    @php
+        $approvedComments = $article->comments
+            ->where('is_approved', true);
+    @endphp
+
     {{-- Карточка новости --}}
     <div class="card shadow mb-4">
 
@@ -44,22 +49,31 @@
         </div>
     @endif
 
+    {{-- Ошибки валидации --}}
+    @if($errors->any())
+        <div class="alert alert-danger">
+            @foreach($errors->all() as $error)
+                <p class="mb-0">{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
     {{-- Комментарии --}}
     <div class="card shadow mb-4">
         <div class="card-header">
             <h4 class="mb-0">
-                Комментарии ({{ $article->comments->count() }})
+                Комментарии ({{ $approvedComments->count() }})
             </h4>
         </div>
 
         <div class="card-body">
 
-            @forelse($article->comments as $comment)
+            @forelse($approvedComments as $comment)
                 <div class="border rounded p-3 mb-3">
 
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <strong>
-                            {{ $comment->user->name }}
+                            {{ $comment->user->name ?? $comment->user->email ?? 'Пользователь' }}
                         </strong>
 
                         <small class="text-muted">
@@ -89,7 +103,7 @@
                 </div>
             @empty
                 <p class="text-muted text-center mb-0">
-                    Пока комментариев нет. Будьте первым!
+                    Пока одобренных комментариев нет. Будьте первым!
                 </p>
             @endforelse
 
@@ -97,45 +111,52 @@
     </div>
 
     {{-- Форма добавления комментария --}}
-    <div class="card shadow mb-4">
-        <div class="card-header">
-            <h4 class="mb-0">Оставить комментарий</h4>
+    @auth
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Оставить комментарий</h4>
+            </div>
+
+            <div class="card-body">
+
+                <form action="{{ route('comments.store', $article->id) }}"
+                      method="POST">
+
+                    @csrf
+
+                    <div class="mb-3">
+                        <label for="content" class="form-label">
+                            Ваш комментарий
+                        </label>
+
+                        <textarea name="content"
+                                  id="content"
+                                  class="form-control @error('content') is-invalid @enderror"
+                                  rows="4"
+                                  placeholder="Введите текст комментария..."
+                                  required>{{ old('content') }}</textarea>
+
+                        @error('content')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Отправить комментарий
+                    </button>
+
+                </form>
+
+            </div>
         </div>
-
-        <div class="card-body">
-
-            <form action="{{ route('comments.store', $article->id) }}"
-                  method="POST">
-
-                @csrf
-
-                <div class="mb-3">
-                    <label for="content" class="form-label">
-                        Ваш комментарий
-                    </label>
-
-                    <textarea name="content"
-                              id="content"
-                              class="form-control @error('content') is-invalid @enderror"
-                              rows="4"
-                              placeholder="Введите текст комментария..."
-                              required>{{ old('content') }}</textarea>
-
-                    @error('content')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                    Отправить комментарий
-                </button>
-
-            </form>
-
+    @else
+        <div class="alert alert-info">
+            Чтобы оставить комментарий, необходимо
+            <a href="{{ route('login') }}">войти</a> в аккаунт.
         </div>
-    </div>
+    @endauth
 
 </div>
 @endsection

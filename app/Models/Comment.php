@@ -11,15 +11,21 @@ class Comment extends Model
         'article_id',
         'user_id',
         'content',
+        'is_approved',
     ];
 
-    // Комментарий принадлежит новости
+    protected function casts(): array
+    {
+        return [
+            'is_approved' => 'boolean',
+        ];
+    }
+
     public function article(): BelongsTo
     {
         return $this->belongsTo(Article::class);
     }
 
-    // Комментарий принадлежит пользователю
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

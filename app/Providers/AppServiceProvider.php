@@ -19,9 +19,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Gate::define('moderate-comments', function (User $user) {
+            return $user->role?->name === 'moderator';
+        });
         Gate::policy(Comment::class, CommentPolicy::class);
         Gate::policy(Article::class, ArticlePolicy::class);
-        Gate::before (function (User $user, string $ability) {
+        Gate::before(function (User $user, string $ability) {
             if ($user->role && $user->role->name === 'moderator') {
                 return true;
             }
