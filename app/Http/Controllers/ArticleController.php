@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-
+use App\Mail\ArticleCreated;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 class ArticleController
 {
     // Список новостей
@@ -43,6 +45,7 @@ class ArticleController
     }
 
     // Сохранение новой новости
+
     public function store(Request $request)
     {
         Gate::authorize('create', Article::class);
@@ -54,12 +57,25 @@ class ArticleController
             'author' => 'required|string|max:255',
         ]);
 
-        Article::create($validated);
+        // Сохраняем статью в базе данных
+        $article = Article::create($validated);
+
+        // Находим модератора
+        $moderator = User::whereHas('role', function ($query) {
+            $query->where('name', 'moderator');
+        })->first();
+
+        // Отправляем письмо модератору
+        if ($moderator) {
+            Mail::to($moderator->email)
+                ->send(new ArticleCreated($article));
+        }
 
         return redirect()
             ->route('articles.index')
             ->with('success', 'Новость успешно добавлена!');
     }
+
 
     // Форма редактирования
     public function edit($id)
