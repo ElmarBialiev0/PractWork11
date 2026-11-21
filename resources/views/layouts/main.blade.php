@@ -8,6 +8,36 @@
     <title>@yield('title', 'Мой сайт на Laravel')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    .pagination {
+        gap: 6px;
+    }
+
+    .pagination .page-link {
+        border: none;
+        border-radius: 8px;
+        color: #495057;
+        padding: 9px 15px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: #0d6efd;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        color: white;
+        box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background-color: #f8f9fa;
+        color: #adb5bd;
+    }
+</style>
 </head>
 
 <body>
