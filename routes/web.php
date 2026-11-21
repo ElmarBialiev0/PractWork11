@@ -1,10 +1,9 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\ArticleController;
 // Главная страница через контроллер
 Route::get('/', [MainController::class, 'index'])->name('home');
 
@@ -52,3 +51,6 @@ Route::get('/signin', [AuthController::class, 'create'])
 // Обработка регистрации
 Route::post('/signin', [AuthController::class, 'registration'])
     ->name('signin.registration');
+
+Route::get('/articles', [ArticleController::class, 'index'])
+    ->name('articles.index');
