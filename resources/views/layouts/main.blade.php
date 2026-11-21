@@ -10,6 +10,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         .pagination {
             gap: 6px;
@@ -66,34 +68,24 @@
                 <ul class="navbar-nav ms-auto align-items-lg-center">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">
-                            Главная
-                        </a>
+                        <a class="nav-link" href="{{ route('home') }}">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('about') }}">
-                            О нас
-                        </a>
+                        <a class="nav-link" href="{{ route('about') }}">О нас</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('contacts') }}">
-                            Контакты
-                        </a>
+                        <a class="nav-link" href="{{ route('contacts') }}">Контакты</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('galery', 0) }}">
-                            Галерея
-                        </a>
+                        <a class="nav-link" href="{{ route('galery', 0) }}">Галерея</a>
                     </li>
 
                     @auth
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('articles.index') }}">
-                                Новости
-                            </a>
+                            <a class="nav-link" href="{{ route('articles.index') }}">Новости</a>
                         </li>
 
                         @can('moderate-comments')
@@ -113,7 +105,6 @@
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
-
                                 <button type="submit" class="btn btn-outline-light btn-sm ms-lg-2">
                                     Выйти
                                 </button>
@@ -121,11 +112,8 @@
                         </li>
 
                     @else
-
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('signin.create') }}">
-                                Регистрация
-                            </a>
+                            <a class="nav-link" href="{{ route('signin.create') }}">Регистрация</a>
                         </li>
 
                         <li class="nav-item">
@@ -133,13 +121,16 @@
                                 Войти
                             </a>
                         </li>
-
                     @endauth
 
                 </ul>
             </div>
         </div>
     </nav>
+
+    <div class="container mt-3">
+        <div id="app"></div>
+    </div>
 
     <main class="container my-5">
         @yield('content')
