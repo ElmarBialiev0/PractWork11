@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\AuthController;
 
 // Главная страница через контроллер
 Route::get('/', [MainController::class, 'index'])->name('home');
@@ -43,3 +44,11 @@ Route::get('/contacts', function () {
 // Страница галереи
 Route::get('/galery/{id}', [MainController::class, 'galery'])
     ->name('galery');
+
+// Страница регистрации
+Route::get('/signin', [AuthController::class, 'create'])
+    ->name('signin.create');
+
+// Обработка регистрации
+Route::post('/signin', [AuthController::class, 'registration'])
+    ->name('signin.registration');
